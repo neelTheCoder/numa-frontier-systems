@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>NUMA Frontier Systems — Decoding Imagined Concepts from EEG</title>
 <meta name="description" content="A non-invasive brain–computer interface that decodes which of 36 imagined animals and tools a person is thinking about, directly from EEG brain activity." />
-<!-- Set this to your deployed predict_numa API (e.g. an HF Space / Render URL).
-     You can also override at runtime with ?api=https://your-host  -->
-<meta name="numa-api-base" content="" />
+<!-- Inference runs fully in the browser via onnxruntime-web. Requires
+     numa_v6.onnx + model_meta.json in the repo root (see export_onnx.py / README). -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="stylesheet" href="styles.css" />
 </head>
@@ -55,16 +54,13 @@
   <section id="try" class="try">
     <div class="section-head">
       <h2>Decode a recording</h2>
-      <p>Upload one instance <code>.bdf</code> file from the dataset. The model runs the full
-         pipeline — filtering, windowing, and a recording-level attention network — and returns
-         its best guess plus the picture it points to.</p>
+      <p>Upload one instance <code>.bdf</code> file from the dataset. Everything runs
+         <strong>in your browser</strong> — filtering, windowing, and a recording-level attention
+         network — and returns its best guess plus the picture it points to. Your file never leaves
+         your device.</p>
     </div>
 
-    <div id="apiWarn" class="api-warn" hidden>
-      ⚙️ No prediction server is configured yet. Set the API URL to enable live decoding
-      (append <code>?api=https://your-host</code> to the page URL, or edit the
-      <code>numa-api-base</code> meta tag).
-    </div>
+    <div id="apiWarn" class="api-warn" hidden></div>
 
     <div class="uploader">
       <label id="drop" class="drop" for="file">
@@ -258,6 +254,8 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js"></script>
+<script src="eeg.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
